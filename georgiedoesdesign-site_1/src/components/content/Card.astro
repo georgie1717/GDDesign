@@ -1,0 +1,28 @@
+---
+interface Props {
+  title?: string;
+}
+const { title } = Astro.props;
+---
+
+<div class="ccard prose">
+  {title && <h3 class="ccard__title">{title}</h3>}
+  <slot />
+</div>
+
+<style>
+  .ccard {
+    background: var(--card);
+    border-radius: var(--r-md);
+    padding: 28px 30px 30px;
+  }
+
+  .ccard__title {
+    font-size: var(--t-h4);
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 720px) {
+    .ccard { padding: 22px 22px 24px; }
+  }
+</style>
