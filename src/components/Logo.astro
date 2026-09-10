@@ -1,0 +1,31 @@
+---
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 44, class: cls = '' } = Astro.props;
+---
+
+<!--
+  Placeholder mark. To use your real logo, drop logo.svg into public/images/
+  and replace this whole <svg> block with:
+  <img src="/images/logo.svg" alt="" width={size} height={size} />
+-->
+<svg
+  class={cls}
+  width={size}
+  height={size}
+  viewBox="0 0 44 44"
+  fill="none"
+  aria-hidden="true"
+  role="presentation"
+>
+  <path
+    d="M35 22.4A13 13 0 1 1 30.6 12"
+    stroke="#ff9d00"
+    stroke-width="6.5"
+    stroke-linecap="round"
+  />
+  <path d="M22.6 22.4H35" stroke="#ff9d00" stroke-width="6.5" stroke-linecap="round" />
+  <path d="M22.6 22.4V31" stroke="#131110" stroke-width="4" stroke-linecap="round" />
+</svg>

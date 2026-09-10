@@ -1,0 +1,88 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  navVariant?: 'pill' | 'lockup';
+  /** Applies the cream gradient to the top of the page */
+  creamTop?: boolean;
+  ogImage?: string;
+  noFooter?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  navVariant = 'pill',
+  creamTop = false,
+  ogImage = site.ogImage,
+  noFooter = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} - ${site.shortName}` : `${site.shortName} - ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogUrl = new URL(ogImage, site.url).href;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.domain} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class={creamTop ? 'has-cream-top' : ''}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav variant={navVariant} />
+    <main id="main">
+      <slot />
+    </main>
+    {!noFooter && <Footer />}
+  </body>
+</html>
+
+<style is:global>
+  /* The cream gradient sits behind the nav and the first section so the
+     nav pill appears to float over it, exactly like the old site. */
+  body.has-cream-top {
+    background:
+      linear-gradient(
+          170deg,
+          var(--cream-1) 0%,
+          var(--cream-2) 34%,
+          var(--cream-3) 62%,
+          var(--surface-2) 100%
+        )
+        no-repeat top center / 100% 760px,
+      var(--surface-2);
+  }
+</style>

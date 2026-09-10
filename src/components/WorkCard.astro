@@ -1,0 +1,77 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  category: string;
+  thumbnail: string;
+  year?: string;
+}
+const { href, title, category, thumbnail, year } = Astro.props;
+---
+
+<a class="card" href={href}>
+  <div class="card__thumb">
+    <img src={thumbnail} alt="" loading="lazy" decoding="async" />
+  </div>
+  <div class="card__meta">
+    <span class="pill">{category}</span>
+    {year && <span class="card__year">{year}</span>}
+  </div>
+  <h3 class="card__title">{title}</h3>
+</a>
+
+<style>
+  .card {
+    display: block;
+    background: var(--card);
+    border-radius: var(--r-md);
+    padding: 28px 28px 32px;
+    text-decoration: none;
+    transition: transform 0.32s var(--ease), box-shadow 0.32s var(--ease);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -24px rgba(19, 17, 16, 0.35);
+  }
+
+  .card__thumb {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 11;
+    margin-bottom: 26px;
+    overflow: hidden;
+  }
+
+  .card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s var(--ease);
+  }
+
+  .card:hover .card__thumb img { transform: scale(1.03); }
+
+  .card__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .card__year {
+    font-size: var(--t-xs);
+    color: var(--ink-muted);
+  }
+
+  .card__title {
+    font-size: var(--t-h3);
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  @media (max-width: 720px) {
+    .card { padding: 20px 20px 24px; }
+    .card__thumb { margin-bottom: 18px; }
+  }
+</style>

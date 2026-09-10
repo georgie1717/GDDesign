@@ -1,0 +1,353 @@
+---
+title: 'Juice Plus+, Checkout that converts without forcing accounts'
+category: 'Product Design'
+summary: 'Redesigned checkout, authentication and partner attribution to enable guest checkout, reduce friction and improve conversion across global markets.'
+intro:
+  - 'Redesigned checkout, authentication, and partner attribution to enable guest checkout, reduce friction, and improve conversion across global markets.'
+  - "The challenge was balancing conversion goals with long-term user trust, making it easier to buy without forcing commitments users weren't ready for."
+meta:
+  - label: 'Role'
+    value: 'Sole UX/UI Designer'
+  - label: 'Platform'
+    value: 'Shopify Plus'
+  - label: 'Scope'
+    value: 'Checkout, login (OTP + password), account creation, partner assignment, post-purchase account flows'
+thumbnail: '/images/work/checkout-conversion/thumb.png'
+hero: '/images/work/checkout-conversion/hero.png'
+order: 1
+year: '2025'
+draft: false
+---
+
+<Section title="The Problem" tone="surface">
+
+The existing experience was fragmented across checkout, login, and account
+systems, creating confusion for users and limitations for the business.
+
+**Outcome focus**
+
+- Reduced friction at checkout
+- Introduced flexible authentication (OTP + password)
+- Re-architected partner attribution model
+- Created scalable flows across global markets
+
+</Section>
+
+<Section title="Key issues" layout="stack" tone="plain">
+
+<CardGrid cols={2}>
+
+<Card title="1. Checkout friction">
+- Users were forced into account creation
+- No guest checkout for purchase journeys
+- Subscription flows added additional complexity
+</Card>
+
+<Card title="2. Password-only authentication model">
+- The system relied entirely on password-based login
+- This created friction for:
+  - New users who did not want to create an account
+  - Returning users who could not remember passwords
+- There was no low-friction way to access orders post-purchase
+</Card>
+
+<Card title="3. Broken partner attribution logic">
+- Partners were assigned at **account creation**, not purchase
+- This led to:
+  - Incorrect attribution when users did not convert
+  - Duplicate accounts across regions
+  - Users being locked into a partner too early
+</Card>
+
+<Card title="4. Disconnected systems">
+- Shopify (checkout + accounts)
+- Exigo (partner/account system)
+- Authentication layer
+
+These systems operated independently, but users experienced them as a single
+journey, creating confusion and inconsistency.
+</Card>
+
+</CardGrid>
+
+</Section>
+
+<Section title="Constraints" tone="surface">
+
+The solution needed to work within several technical and business constraints.
+
+- Shopify checkout limitations (restricted customisation)
+- Existing account structures already in use globally
+- Dependency on Exigo for partner attribution logic
+- Need to support multiple regions and account scenarios
+- Requirement to maintain compatibility with existing users
+- Legacy account structures already in place
+
+</Section>
+
+<Section title="User journey" tone="plain">
+
+I started by mapping the full customer journey across checkout, authentication,
+and partner attribution to understand how multiple systems interacted.
+
+What initially appeared as a "checkout problem" quickly revealed itself as a
+fragmented ecosystem spanning:
+
+- Shopify checkout and customer accounts
+- OTP and password-based authentication
+- Partner attribution logic via Exigo
+
+These systems had evolved independently, but from a user perspective, they
+formed a single journey, leading to significant friction and inconsistency.
+
+By mapping all entry points, edge cases, and system dependencies, I was able to
+identify where users were encountering failure or confusion.
+
+<Figure
+  src="/images/work/checkout-conversion/existing-journey.png"
+  alt="Journey map of the existing checkout, login and partner attribution flows"
+  caption="Existing journey: mapping every entry point, edge case and system dependency"
+/>
+
+Rather than treating checkout, login, and partner attribution as separate
+problems, I reframed the challenge as a system design issue.
+
+<Callout>
+How might we align identity, purchase, and partner attribution into a single,
+coherent journey?
+</Callout>
+
+This led to three guiding principles.
+
+- Purchase should be the primary moment of commitment
+- Authentication should be flexible, not restrictive
+- Partner attribution should reflect user intent
+
+</Section>
+
+<Section title="Designing a new system" layout="stack" tone="surface">
+
+### A. Introducing OTP to enable guest checkout
+
+To support guest checkout, I introduced OTP (one-time passcode) authentication
+as a new capability. This allowed users to:
+
+- Complete purchases without creating a password
+- Access their account via email verification
+- Maintain access to orders without upfront commitment
+
+OTP was not introduced as a standalone feature, but as part of a broader system
+redesign to reduce friction and improve conversion.
+
+<Figure
+  src="/images/work/checkout-conversion/otp-flow.png"
+  alt="One-time passcode entry screens for guest checkout"
+  caption="OTP entry as part of the guest checkout journey"
+  framed
+/>
+
+### B. Enabling flexible authentication (OTP + password)
+
+Introducing OTP required the system to support multiple user types: new users
+(OTP-first), existing password users, and users with accounts but no password.
+
+I designed a unified flow where:
+
+- Email input determines the correct authentication path
+- Users can switch between OTP and password
+- Password creation is optional and prompted post-purchase
+
+<Figure
+  src="/images/work/checkout-conversion/auth-flow.png"
+  alt="Unified authentication flow branching on email input"
+  caption="A single entry point that routes each user state to the right path"
+  framed
+/>
+
+### C. Shifting partner attribution to purchase
+
+A key system change was moving partner assignment from account creation to the
+point of purchase. This allowed users to:
+
+- Enter via partner links (stored via cookies)
+- Change or remove a partner before checkout
+- Be matched with a partner if none was selected
+
+Partner attribution was finalised only after purchase, ensuring accuracy and
+enabling account consolidation across regions.
+
+<Figure
+  src="/images/work/checkout-conversion/partner-attribution.png"
+  alt="Partner selection step inside the checkout flow"
+  caption="Partner attribution added as part of checkout, with search, assignment and removal"
+  framed
+/>
+
+### D. Supporting post-purchase account creation
+
+Users could complete checkout as guests, while still having an account created
+in the background. Post-purchase, users were prompted to set a password, or
+continue using OTP for future access.
+
+This balanced conversion optimisation with long-term account engagement.
+
+</Section>
+
+<Section title="The Solution" tone="plain">
+
+The solution was a redesigned system that aligned checkout, authentication, and
+partner attribution into a single, cohesive experience.
+
+**Key improvements**
+
+- Guest checkout enabled across all product journeys except partner activation
+- OTP introduced as a low-friction authentication method
+- Flexible login system supporting multiple user states
+- Partner attribution aligned with purchase behaviour
+- Scalable foundation for global account management
+
+<Figure
+  src="/images/work/checkout-conversion/solution-overview.png"
+  alt="Overview of the redesigned checkout and authentication system"
+  caption="The redesigned system, end to end"
+/>
+
+</Section>
+
+<Section title="Outcome" layout="stack" tone="surface">
+
+<Lead>
+The redesigned system established a more flexible and scalable foundation across
+checkout, authentication and partner attribution, delivering measurable
+improvements across conversion, usability and data accuracy.
+</Lead>
+
+<Stats cols={4}>
+  <Stat value="15-22%" label="Reduction in checkout drop-off during testing" />
+  <Stat value="30%+" label="Reduction in failed login attempts" />
+  <Stat value="25%" label="Of guest users set a password after purchase" />
+  <Stat value="~20%" label="Reduction in incorrectly assigned partners" />
+</Stats>
+
+<Cols cols={2}>
+
+<div>
+
+### Conversion and checkout performance
+
+Enabling guest checkout removed a key barrier to purchase, particularly for new
+users.
+
+- 15-22% reduction in checkout drop-off during testing
+- Increased progression from checkout start to payment completion
+- Faster path to purchase by removing mandatory account creation
+
+This was particularly impactful for first-time users, where friction had
+previously been highest.
+
+### Improved authentication success
+
+Introducing OTP significantly improved login success rates and reduced reliance
+on passwords.
+
+- 30%+ reduction in failed login attempts
+- Decrease in password reset requests
+- Higher successful account access across returning users
+
+OTP provided a clearer, lower-friction entry point, especially for users unsure
+of their account status.
+
+### Increased post-purchase account engagement
+
+Allowing users to complete checkout without creating an account upfront improved
+overall engagement with accounts post-purchase.
+
+- 25% of guest users set a password after purchase
+- Higher interaction with order tracking and account features
+- Reduced abandonment during account creation
+
+</div>
+
+<div>
+
+### More accurate partner attribution
+
+Moving partner assignment to the point of purchase significantly improved
+attribution accuracy.
+
+- Around 20% reduction in incorrectly assigned partners
+- Improved alignment between customer intent and partner ownership
+- Cleaner reporting for partner performance and commission tracking
+
+### Cross-region account improvements
+
+The updated system reduced duplication and improved consistency across markets.
+
+- Fewer duplicate accounts created across regions
+- Improved recognition of returning users
+- More unified customer profiles
+
+### Scalable system foundation
+
+Beyond immediate improvements, the project introduced a system that supports
+future iteration and growth.
+
+- Flexible authentication model (OTP + password)
+- Decoupled partner attribution logic
+- Foundation for improved subscription and account experiences
+
+</div>
+
+</Cols>
+
+</Section>
+
+<Section title="Reflection" tone="plain">
+
+This project reinforced how closely UX decisions are tied to measurable business
+outcomes, particularly within ecommerce.
+
+### Designing for conversion impact
+
+Introducing guest checkout demonstrated how reducing friction at key moments can
+directly improve conversion. By allowing users to purchase before committing to
+an account, we aligned the experience with user intent, which was reflected in
+improved completion rates during testing.
+
+### Introducing new systems with measurable results
+
+Implementing OTP as a new authentication model required balancing usability
+improvements with system complexity. The improvement in login success rates
+validated the decision to introduce a lower-friction alternative to passwords,
+while still supporting existing user behaviours.
+
+### Aligning UX with business logic
+
+Moving partner attribution to the point of purchase was a UX-driven decision
+that delivered measurable improvements in data accuracy. This reinforced how
+design decisions can directly impact operational and commercial outcomes, not
+just user experience.
+
+### Designing for real-world complexity
+
+A key challenge was handling a wide range of user states, from new users to
+existing accounts with varying authentication setups. By integrating these edge
+cases into the core system, rather than treating them as exceptions, the final
+experience was more resilient and required fewer workarounds.
+
+### What I would do next
+
+With continued iteration, I would focus on:
+
+- Further optimising post-purchase onboarding flows
+- Increasing visibility and transparency around partner relationships
+- Refining authentication based on behavioural data
+
+These would build on the measurable improvements already achieved and continue
+to enhance both usability and conversion.
+
+<Callout>
+This was not just a checkout problem. It was a system design problem.
+</Callout>
+
+</Section>

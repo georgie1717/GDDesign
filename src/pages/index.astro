@@ -1,0 +1,150 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { site } from '../site';
+
+const work = (await getCollection('work'))
+  .filter((e) => !e.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base creamTop={true}>
+  <!-- ================= hero ================= -->
+  <section class="hero">
+    <div class="page">
+      <div class="hero__grid">
+        <div class="hero__text">
+          <h1 class="hero__title">
+            Designing digital experiences that turn <em>complexity</em> into{' '}
+            <em>clarity</em>
+          </h1>
+
+          <div class="hero__copy">
+            <p>
+              I'm a Product Designer based in {site.location}, focused on creating
+              intuitive, high-performing digital experiences.
+            </p>
+            <p>
+              I specialise in simplifying complex user journeys, from checkout and
+              authentication to content and conversion flows, grounding every
+              decision in user behaviour and business impact.
+            </p>
+            <p>
+              I work across strategy, UX, and UI to design solutions that are both
+              elegant and effective.
+            </p>
+          </div>
+
+          <div class="hero__actions">
+            <a class="btn" href="#work">See my work</a>
+            <a class="btn btn--ghost" href="/about">About me</a>
+          </div>
+        </div>
+
+        <div class="hero__portrait">
+          <img
+            src="/images/georgie.jpg"
+            alt={`${site.name}, ${site.role}`}
+            width="612"
+            height="720"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= work ================= -->
+  <section class="section work" id="work">
+    <div class="page">
+      <div class="work__head">
+        <h2>Selected work</h2>
+        <p>Case studies across ecommerce, authentication and content platforms.</p>
+      </div>
+
+      <div class="work__grid">
+        {work.map((entry) => (
+          <WorkCard
+            href={`/p/${entry.id}/`}
+            title={entry.data.title}
+            category={entry.data.category}
+            thumbnail={entry.data.thumbnail}
+            year={entry.data.year}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: 72px 96px; }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 56px 72px;
+    align-items: start;
+  }
+
+  .hero__title {
+    letter-spacing: -0.03em;
+    margin-bottom: 30px;
+  }
+
+  .hero__title em {
+    font-style: italic;
+  }
+
+  .hero__copy p {
+    font-size: var(--t-body);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+
+  .hero__portrait img {
+    width: 100%;
+    border-radius: var(--r-lg);
+    object-fit: cover;
+    aspect-ratio: 17 / 20;
+  }
+
+  .work__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .work__head p {
+    font-size: var(--t-sm);
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .work__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .hero__grid { grid-template-columns: 1fr; gap: 36px; }
+    .hero { padding-block: 44px 64px; }
+    .hero__portrait { max-width: 340px; }
+  }
+
+  @media (max-width: 720px) {
+    .work__grid { grid-template-columns: 1fr; }
+  }
+</style>
