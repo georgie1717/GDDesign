@@ -1,0 +1,8 @@
+dist/
+.astro/
+node_modules/
+shots/
+.env
+.env.production
+.DS_Store
+Thumbs.db
