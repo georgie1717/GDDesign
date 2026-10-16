@@ -1,12 +1,24 @@
-# Cloudflare Pages / Netlify header rules
+# Netlify header rules.
+# Netlify reads this file from the published output, so Astro copies it there
+# automatically from public/_headers.
 
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
 
+# Images keep the same filename when you replace them, so they must NOT be
+# cached as immutable. max-age=0 with must-revalidate means the browser still
+# caches the file, but checks with the server each time and gets a cheap "not
+# modified" reply unless the file actually changed. Swap an image and visitors
+# see the new one straight away.
 /images/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
+/*.pdf
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Astro puts a content hash in these filenames, so a changed file always gets a
+# new URL. Caching them forever is safe and makes repeat visits fast.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
