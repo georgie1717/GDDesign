@@ -2,3 +2,8 @@
   # Install dependencies first if they are missing, so `astro` is always available.
   command = "[ -x node_modules/.bin/astro ] || npm ci; npm run build"
   publish = "dist"
+
+[build.environment]
+  # Pinned so a change to Netlify's default build image cannot break the site.
+  # Astro 7 needs Node 20 or newer.
+  NODE_VERSION = "22"

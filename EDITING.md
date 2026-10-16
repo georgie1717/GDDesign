@@ -6,7 +6,7 @@ every change you commit is live on your site about a minute later.
 Bookmark two tabs and you have the whole workflow:
 
 - your repo: `github.com/<your-username>/georgiedoesdesign`
-- your Cloudflare Pages project, for build status and rollbacks
+- your Netlify project, for build status and rollbacks
 
 ---
 
@@ -20,8 +20,8 @@ Bookmark two tabs and you have the whole workflow:
 4. Scroll down, write a short note in the commit box ("Fix typo in outcome"),
    and click **Commit changes**.
 
-Cloudflare picks it up automatically. Watch it in the **Deployments** tab of your
-Pages project. Green tick means live.
+Netlify picks it up automatically. Watch it in the **Deploys** tab of your
+Netlify project. "Published" means live.
 
 ## Add a new case study
 
@@ -91,9 +91,9 @@ When you commit, instead of accepting the default, choose **Create a new branch
 for this commit and start a pull request**. Name the branch something like
 `partner-cart`.
 
-Cloudflare builds every branch and gives it its own private URL, something like
-`partner-cart.georgiedoesdesign.pages.dev`. You will find the link in the
-**Deployments** tab, or as a comment on the pull request. Check your work there.
+Netlify builds every branch and gives it its own private URL, a deploy preview.
+You will find the link in the **Deploys** tab, or as a comment on the pull
+request. Check your work there.
 
 When you are happy, open the pull request on GitHub and click **Merge pull
 request**. That is what puts it live.
@@ -114,9 +114,9 @@ it is almost always one of two things:
 Fix the file, commit again. A failed build does not affect the live site, it just
 does not replace it.
 
-**Something looks wrong on the live site.** In Cloudflare, **Deployments**, find
-the last good build, click the three dots and choose **Rollback to this
-deployment**. The site reverts immediately. Then fix the file properly.
+**Something looks wrong on the live site.** In Netlify, open **Deploys**, click
+the last good deploy and choose **Publish deploy**. The site reverts
+immediately. Then fix the file properly.
 
 ---
 

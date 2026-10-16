@@ -3,7 +3,7 @@
 Your portfolio site. Static, no CMS, no monthly fee. Case studies are `.mdx`
 files you edit like documents; images are files you drop in a folder.
 
-Built with [Astro](https://astro.build). Hosted free on Cloudflare Pages.
+Built with [Astro](https://astro.build). Hosted free on Netlify.
 
 **Read these in order:**
 
@@ -122,8 +122,8 @@ Still to swap in:
 
 ## Deploying
 
-See **DEPLOY.md** for the one-time GitHub, Cloudflare Pages and Namecheap setup.
-After that, every push to `main` publishes automatically.
+See **DEPLOY.md** for the one-time Netlify and Namecheap setup. After that,
+every push to `main` publishes automatically.
 
 ---
 
@@ -137,5 +137,5 @@ After that, every push to `main` publishes automatically.
   [Sveltia CMS](https://github.com/sveltia/sveltia-cms) can be added on top of
   these same files, giving you a browser admin at `/admin` without changing how
   anything is stored.
-- **Analytics.** Cloudflare Web Analytics is free, privacy-friendly and needs no
-  cookie banner. Turn it on in the Cloudflare dashboard.
+- **Analytics.** Netlify Analytics is paid. For a free, privacy-friendly option
+  that needs no cookie banner, look at Plausible or Umami.

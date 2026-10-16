@@ -1,196 +1,136 @@
 # Getting the site live on georgiedoesdesign.com
 
-Read this top to bottom. Nothing here needs a terminal.
+Hosted on **Netlify**. The site is already building there; this covers pointing
+your domain at it and what to do day to day.
 
-## What you are actually setting up
-
-Cloudflare has two ways to host a site: **Pages** (the older one) and **Workers**
-(the current one). Cloudflare's dashboard now pushes you towards Workers, which
-is what you have got. Workers is fine, it is the one Cloudflare is actively
-developing, so we will stay on it.
-
-The one difference that matters: **Workers needs a small settings file in your
-repo. Pages did not.** That file tells Cloudflare "this is a plain static site,
-and the finished files are in the `dist` folder". Without it, the deploy step has
-no idea what to publish.
-
-That file is `wrangler.json` and it is included in the project now.
+Nothing here needs a terminal.
 
 ---
 
-## Before you start: protect your email
+## The good news about your domain
 
-`hello@georgiedoesdesign.com` only works because of DNS records at Namecheap
-(MX, and probably SPF/DKIM TXT records). Later on you move DNS to Cloudflare, and
-if any of those records get missed your email silently stops arriving.
+Netlify can serve `georgiedoesdesign.com` while Namecheap keeps running your
+DNS. You add two records and that is it.
 
-Do this now, it takes two minutes:
-
-1. In Namecheap, go to **Domain List > georgiedoesdesign.com > Advanced DNS**.
-2. Screenshot the whole record list.
-3. Keep it until the new site has been live for a week.
-
-You will compare it against Cloudflare's list in step 4.
+That matters because `hello@georgiedoesdesign.com` only works thanks to MX and
+TXT records sitting at Namecheap. You are not moving them, so there is nothing
+to break. (The Cloudflare route would have required moving your nameservers,
+which is where email usually goes wrong.)
 
 ---
 
-## Step 1. Add the settings file to your repo
+## Step 1. Check the site builds and looks right
 
-If you unzipped a fresh copy of the project, `wrangler.json` is already in it and
-you can skip to step 2 after pushing it. If your repo is already on GitHub
-without it, add it in the browser:
+In Netlify, open your site and look at **Deploys**. The most recent one should
+say **Published**.
 
-1. Go to `github.com/georgie1717/GDDesign`.
-2. Click **Add file > Create new file**.
-3. In the filename box type exactly: `wrangler.json`
-4. Paste this in:
+Click the `*.netlify.app` address at the top of the site overview. Check the
+home page, one case study, and the about page, on your laptop and your phone,
+before you touch any DNS.
 
-```json
-{
-  "name": "gddesign",
-  "compatibility_date": "2026-09-09",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "404-page"
-  }
-}
-```
+## Step 2. Tell Netlify about your domain
 
-5. Scroll down, click **Commit changes**.
+1. In your Netlify site, go to **Domain management** (under **Project
+   configuration**), then **Add a domain**.
+2. Enter `georgiedoesdesign.com` and continue.
+3. When Netlify asks, choose the option to **keep using your existing DNS**
+   rather than switching to Netlify DNS. It will then show you the records to
+   create.
 
-**One thing to check: the `name`.** It must match the name of the Worker you
-already created, or Cloudflare will publish to a second, differently named Worker
-instead. To find it, go to your Cloudflare dashboard, click **Compute (Workers)**
-in the left sidebar, and look at the list. The name is also the first part of the
-free `.workers.dev` address. If it is not `gddesign`, edit the `name` line in
-`wrangler.json` to match, exactly, including capitalisation.
+Do this step first. If you create the records at Namecheap before Netlify knows
+about the domain, it will not serve the site and you will get an error page.
 
-What the file does, line by line:
+## Step 3. Add two records at Namecheap
 
-- `name` which Worker to publish to
-- `compatibility_date` pins Cloudflare's behaviour to how it worked on that date, so a future Cloudflare change cannot break your site. Leave it alone
-- `assets.directory` where the finished site ends up after the build. Astro always writes to `dist`
-- `not_found_handling` serves your 404 page for a bad URL, instead of a bare Cloudflare error
+**Domain List > georgiedoesdesign.com > Advanced DNS**.
 
-## Step 2. Fix the build command
+Before you change anything, screenshot the existing record list. You are not
+touching the MX or TXT records, but having a copy costs nothing.
 
-Your build settings currently say `nmp run build`. The letters are transposed, so
-the build machine looks for a program called `nmp`, does not find one, and stops.
-That is the `nmp: not found` line in the log.
+Then add:
 
-1. In Cloudflare, open your Worker.
-2. Go to **Settings**, then find the **Build** section.
-3. Change the build command from `nmp run build` to:
+| Type  | Host | Value                              |
+| ----- | ---- | ---------------------------------- |
+| ALIAS | @    | `apex-loadbalancer.netlify.com`    |
+| CNAME | www  | `<your-site-name>.netlify.app`     |
 
-```
-npm run build
-```
+Replace `<your-site-name>` with whatever Netlify gave you, for example
+`gddesign.netlify.app`. Leave off the `https://`.
 
-4. Leave the deploy command as `npx wrangler deploy`. That is correct.
-5. Leave root directory as `/`. Also correct.
-6. **Save.**
+If there is an existing A record or CNAME on `@` or `www` pointing at UXFolio,
+delete those two. Leave everything else exactly as it is.
 
-## Step 3. Run it again
+Netlify prefers ALIAS over a plain A record because it follows their load
+balancer if the IP ever changes. Namecheap supports ALIAS, so use it.
 
-1. Go to the **Builds** tab of your Worker.
-2. Click **Retry build** on the failed one, or **Create build** if you prefer a
-   fresh run.
-3. Watch the five stages. You want green ticks on all of them, ending with
-   **Deploying**.
+## Step 4. Wait, then check HTTPS
 
-It takes about a minute. Expect these lines in the log, in this order:
+DNS usually updates within 30 minutes, occasionally a few hours.
 
-- `Executing user build command: npm run build`
-- `7 page(s) built in ...`
-- `Uploaded ... assets`
-- `Deployed gddesign`
-
-Then open the `.workers.dev` address shown on the Worker's overview page. That is
-your site, live, on a free Cloudflare URL. Your real domain still points at
-UXFolio at this stage, so nothing is at risk and there is no rush.
-
-**Check it properly before moving on:** the home page, one case study, the about
-page, and the same three on your phone.
-
-## Step 4. Move DNS to Cloudflare
-
-Cloudflare can only serve a root domain like `georgiedoesdesign.com` if it is
-running the DNS for it. Your domain stays registered with Namecheap and you keep
-paying Namecheap for it. Only the DNS moves.
-
-1. In Cloudflare, click **Add a domain** and enter `georgiedoesdesign.com`.
-   Choose the **Free** plan.
-2. Cloudflare scans your existing DNS and shows what it found.
-   **Compare that list against your Namecheap screenshot now.** Every MX record
-   and every TXT record must be there. Add anything missing by hand before you
-   continue. This is the step where email breaks if you rush it.
-3. Cloudflare gives you two nameservers, something like `dana.ns.cloudflare.com`
-   and `rick.ns.cloudflare.com`. Copy both.
-4. In Namecheap: **Domain List > georgiedoesdesign.com > Manage**, find
-   **Nameservers**, switch the dropdown from "Namecheap BasicDNS" to **Custom
-   DNS**, paste the two Cloudflare nameservers, and save with the green tick.
-5. Wait. Usually 15 minutes to a few hours, occasionally up to 24. Cloudflare
-   emails you when the domain is active.
-
-Your old site keeps serving from UXFolio the whole time this is happening.
-
-## Step 5. Point the domain at the site
-
-Once Cloudflare says the domain is active:
-
-1. Open your Worker, go to **Settings**, then **Domains & Routes**.
-2. Click **Add**, choose **Custom domain**.
-3. Enter `georgiedoesdesign.com`. Cloudflare creates the DNS record itself. Do
-   not create it by hand.
-4. Click **Add** again and repeat for `www.georgiedoesdesign.com`.
-5. HTTPS is issued automatically, usually within a few minutes.
+Back in Netlify's **Domain management**, the domain should go from a warning to
+a green tick. HTTPS is issued automatically with Let's Encrypt, normally within
+a few minutes of the DNS resolving. If it has not appeared after an hour, there
+is a **Verify DNS configuration** button there to prod it.
 
 Open `https://georgiedoesdesign.com`. Done.
 
-## Step 6. Cancel UXFolio
+## Step 5. Cancel UXFolio
 
-Only once the new site has been live and correct for a few days. Before you
-cancel, make sure you have local copies of anything that exists only there: case
+Once the new site has been live and correct for a few days. Before you cancel,
+make sure you have your own copies of anything that exists only there: case
 study images, your CV, your portrait photo.
 
 ---
 
 ## From then on
 
-Edit files on github.com and commit. Cloudflare rebuilds and publishes in about a
-minute. **EDITING.md** covers that: how to preview a change on its own URL before
-it goes live, and how to roll back.
+Edit files on github.com and commit. Netlify rebuilds and publishes in about a
+minute. **EDITING.md** covers that: how to preview a change on its own URL
+before it goes live, and how to roll back.
+
+Netlify's equivalents of what EDITING.md describes:
+
+- **Branch previews.** Commit to a branch instead of `main` and Netlify builds
+  it to its own URL. Find it under **Deploys**, or as a comment on the pull
+  request.
+- **Rollback.** **Deploys**, click an older successful deploy, then **Publish
+  deploy**. The site reverts immediately.
+
+## One thing to keep an eye on
+
+Netlify's current free plan runs on credits rather than fixed limits: 300 a
+month, with a production deploy costing 15 and bandwidth costing 20 per GB.
+
+In practice that is roughly twenty publishes a month before bandwidth is even
+counted. Fine for normal use, but if you are tweaking a case study and pushing
+twenty small commits in an afternoon, you can run the month down. Two habits
+avoid it entirely: work on a branch and merge once when you are happy, and batch
+several edits into one commit rather than committing each paragraph.
+
+You can see where you are under **Billing** in your Netlify team settings.
 
 ---
 
 ## When a build fails
 
-A failed build never touches the live site. It just does not replace it. So you
-can always try again.
+A failed build never replaces the live site, so you can always retry.
 
-Open the failed build, read the **last few lines** of the log, and match it here:
+Open the failed deploy and read the **last few lines** of the log.
 
 | Log says | What it means | Fix |
 | --- | --- | --- |
-| `nmp: not found` or similar | Typo in the build command | Step 2 above |
-| `Missing entry-point` or `assets` error | `wrangler.json` missing or `name` wrong | Step 1 above |
+| `npm error ERESOLVE` | `package.json` and the lockfile disagree | Both files need regenerating together |
 | `Could not resolve ... .png` | An image path in a case study points at a file that is not in the repo | Check the path matches the file in `public/images/`, including capitals |
-| `Expected component X to be defined` | A layout block is spelled wrong in a `.mdx` file | Check the spelling against CONTENT-GUIDE.md. They are case sensitive: `Section`, not `section` |
+| `Expected component X to be defined` | A layout block is spelled wrong in a `.mdx` file | Check it against CONTENT-GUIDE.md. They are case sensitive: `Section`, not `section` |
 | `Unexpected character` in a `.mdx` file | Usually a stray `{` or `}` in your copy | Write `\{` instead |
 | Bullets came out as one paragraph | Missing blank line after an opening tag | Add a blank line under the tag and above the closing tag |
 
-The log always names the file and the line number. That is enough for anyone to
-fix it, including you.
-
-## If something looks wrong on the live site
-
-Worker, **Deployments** tab, find the last good one, and roll back to it. The
-site reverts straight away. Then fix the file properly.
+The log always names the file and the line number.
 
 ---
 
 ## If you ever want to start over
 
-Delete the Worker in Cloudflare (**Settings > Delete**) and set it up again from
-step 1. Your repo is untouched, so nothing is lost. The site is entirely
-reconstructible from the GitHub repo, which is the point of it living there.
+Delete the site in Netlify and connect the repo again. Your repo is untouched,
+so nothing is lost. The whole site is reconstructible from GitHub, which is the
+point of it living there.
